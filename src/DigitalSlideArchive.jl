@@ -1,7 +1,7 @@
 module DigitalSlideArchive
 
 export girder_client,
-  gc_auth
+       gc_auth
 
 using CondaPkg
 using PythonCall
