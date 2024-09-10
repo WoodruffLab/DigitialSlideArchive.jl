@@ -1,6 +1,6 @@
 name = "DigitalSlideArchive"
 uuid = "20296499-4daa-4357-ae8d-ba6e76525725"
-authors = ["Kevin Bonham <kevin@bonham.ch>", "David Gutman"]
+authors = ["Kevin Bonham <kevin@bonham.ch>", "David Gutman <dagutman@gmail.com>"]
 version = "0.1.0"
 
 [deps]
