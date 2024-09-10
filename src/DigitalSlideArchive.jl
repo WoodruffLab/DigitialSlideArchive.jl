@@ -1,5 +1,7 @@
 module DigitalSlideArchive
 
+export DSAClient
+
 using PythonCall
 girder_client = pyimport("girder_client")
 
@@ -28,7 +30,7 @@ Base.propertynames(dsa_client::DSAClient) = vcat([:api_url, :client], propertyna
 
 
 """
-    client(; url)
+    client(; url, key)
 
 Create a girder client object that can be used
 for interactiving with a DSA server.
@@ -48,6 +50,10 @@ gc = DSA.client(; url = "http://multiplex.pathology.emory.edu:8080/api/v1")
 ENV["DSA_API_URL"] = "http://multiplex.pathology.emory.edu:8080/api/v1"
 gc = DSA.client()
 ```
+
+If the `key` argument is provided (not recommended, see [`authenticate!`](@ref)),
+or the `DSA_API_KEY` variable is set,
+the client will automatically be authenticated.
 """
 function client(; url = ENV["DSA_API_URL"], key=get(ENV, "DSA_API_KEY", nothing))
     gc = girder_client.GirderClient(; url)
@@ -59,15 +65,12 @@ end
 # TODO: use Preferences.jl and/or set up user-input using TerminalMenus
 
 """
-    authenticate!([client]; key)
+    authenticate!(client; key)
 
 Authenticate the girder client using the provided API `key`.
-If no client is provided, one will be created by calling [`gc_client`](@ref)
-with no arguments (requires `DSA_API_URL` environent variable to be set).
-
 By default, this will look for the enviroment variable `DSA_API_KEY`.
 In principle, you can pass this in your code or add it to `ENV`
-as described in [`gc_client`](@ref), but this is not recommended,
+as described in [`DSA.client`](@ref DigitalSlideArchive.client), but this is not recommended,
 since it's quite easy to accidentally commit that code.
 
 !!! warn
@@ -83,7 +86,7 @@ DSA.authenticate!(gc)
 ```
 """
 function authenticate!(dsa_client::DSAClient; key = ENV["DSA_API_KEY"])
-    dsa_client.client.auth!(; apiKey=key )
+    dsa_client.auth!(; apiKey=key )
     return dsa_client
 end
 
