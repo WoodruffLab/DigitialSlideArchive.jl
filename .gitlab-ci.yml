@@ -21,11 +21,6 @@ Julia 1.10:
   extends:
     - .script
     - .coverage
-Julia nightly:
-  image: julia:nightly
-  extends:
-    - .script
-    - .coverage
 pages:
   image: julia:1.10
   stage: deploy
