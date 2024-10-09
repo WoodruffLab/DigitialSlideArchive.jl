@@ -2,8 +2,13 @@ module DigitalSlideArchive
 
 export DSAClient,
        DSAResponse,
+       get_collection,
+       list_folders,
+       list_files,
        get_item,
-       get_files
+       get_files,
+       upload_file,
+       create_folder
 
 using PythonCall
 
@@ -111,6 +116,19 @@ end
 
 # TODO: use Preferences.jl and/or set up user-input using TerminalMenus
 
+get_collection(client::DSAClient, id) = DSAResponse(client.getCollection(id))
+get_collection(client::DSAClient, resp::DSAResponse) = DSAResponse(client.getCollection(resp["_id"]))
+
+function list_folders(client::DSAClient, resp::DSAResponse)
+    dirs = client.listFolder(resp["_id"]; parentFolderType=resp["_modelType"])
+    return [DSAResponse(dir) for dir in dirs]
+end
+
+function list_files(client::DSAClient, resp::DSAResponse)
+    files = client.listItem(resp["_id"])
+    return [DSAResponse(file) for file in files]
+end
+
 """
     get_item(client, item)
 
@@ -127,6 +145,15 @@ Get files stored in `item` "_id".
 function get_files(client::DSAClient, item)
     resp = client.get("item/$item/files")
     [DSAResponse(v) for v in pyconvert(Vector, resp)]
+end
+
+
+function create_folder(client::DSAClient, parent_resp::DSAResponse, name)
+    DSAResponse(client.loadOrCreateFolder(name, parent_resp["_id"], parent_resp["_modelType"]))
+end
+
+function upload_file(client::DSAClient, folder_id, file_path)
+    DSAResponse(client.uploadFileToFolder(folder_id, file_path))
 end
 
 end # module DigitalSlideArchive
