@@ -1,7 +1,10 @@
 name = "DigitalSlideArchive"
 uuid = "20296499-4daa-4357-ae8d-ba6e76525725"
-authors = ["Kevin Bonham <kevin@bonham.ch>", "David Gutman <dagutman@gmail.com>"]
-version = "0.1.0"
+authors = [
+    "Kevin Bonham <kevin@bonham.ch>",
+    "David Gutman <dagutman@gmail.com>",
+]
+version = "0.2.0"
 
 [deps]
 CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
